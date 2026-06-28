@@ -56,7 +56,7 @@ nav {
   font-size: 1rem; font-weight: 800;
   color: var(--orange); text-decoration: none; letter-spacing: 0.02em;
 }
-.nav-links { display: flex; gap: 1.5rem; list-style: none; }
+.nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
 .nav-links a {
   color: var(--ink-dim); text-decoration: none;
   font-size: 0.72rem; font-weight: 600;
@@ -64,6 +64,21 @@ nav {
   transition: color 0.2s;
 }
 .nav-links a:hover, .nav-links a.active { color: var(--orange); }
+.lang-btn {
+  background: transparent;
+  border: 1px solid var(--orange);
+  color: var(--orange);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.lang-btn:hover {
+  background: var(--orange);
+  color: white;
+}
 @media (max-width: 640px) { .nav-links { display: none; } }
 
 /* ── WRAPPER ── */
@@ -118,6 +133,8 @@ nav {
   font-size: clamp(2rem, 6vw, 3.6rem);
   font-weight: 800; color: #fff; line-height: 1.1;
   margin-bottom: 1.2rem;
+  transform: scaleY(1.15);
+  display: inline-block;
 }
 .hero h1 em { font-style: normal; text-decoration: underline; text-decoration-thickness: 4px; }
 .hero-sub {
@@ -168,7 +185,10 @@ nav {
   font-family: 'Syne', sans-serif;
   font-size: clamp(1.6rem, 4vw, 2.2rem);
   font-weight: 800; color: var(--ink);
-  margin-bottom: 0.8rem; line-height: 1.2;
+  margin-bottom: 0.8rem; line-height: 1.35;
+  text-transform: none;
+  transform: scaleY(1.15);
+  display: inline-block;
 }
 .section-deck {
   font-size: 1rem; color: var(--ink-mid);
@@ -225,6 +245,8 @@ nav {
   padding: 0.25rem 0.5rem; text-align: center;
   line-height: 1.4; border-radius: 3px;
   margin-top: 0.15rem;
+  transform: scaleY(1.15);
+  display: inline-block;
 }
 .tl-body { font-size: 0.9rem; color: var(--ink-mid); line-height: 1.65; }
 .tl-body strong { color: var(--ink); }
@@ -404,7 +426,11 @@ nav {
   border-bottom: 4px solid var(--qp-lt);
 }
 .qwen-section .section-eyebrow { color: var(--qp-lt); }
-.qwen-section h2 { color: #fff; }
+.qwen-section h2 { 
+  color: #fff; 
+  transform: scaleY(1.15);
+  display: inline-block;
+}
 .qwen-section .section-deck { color: rgba(168,85,247,0.7); }
 .qwen-section p { color: rgba(255,255,255,0.8); }
 .qwen-section p strong { color: #fff; }
@@ -592,6 +618,7 @@ code {
     <li><a href="#ai">AI Comeback</a></li>
     <li><a href="#stack">The Stack</a></li>
     <li><a href="#verdict">Verdict</a></li>
+    <li><button class="lang-btn" id="langToggle" type="button">中文</button></li>
   </ul>
 </nav>
 
@@ -1089,6 +1116,238 @@ code {
 </footer>
 
 <script>
+// ── TRANSLATION DATA ──
+const translations = {
+  en: {
+    nav: {
+      brand: "ALIBABA 101",
+      origin: "Origin",
+      build: "The Build",
+      kneecap: "Kneecapped",
+      context: "Context",
+      ai: "AI Comeback",
+      stack: "The Stack",
+      verdict: "Verdict"
+    },
+    today: {
+      label: "⚡ June 27, 2026 — a historically weird day in AI",
+      claude: "Claude Fable 5 — suspended by US govt, Day 15",
+      gpt: "GPT-5.6 Sol — live, US govt-vetted partners only",
+      qwen: "Qwen 3.7-Max — one API call away for anyone"
+    },
+    hero: {
+      eyebrow: "Practitioner's Intelligence Report · June 2026",
+      title: "The Company That Got<br><em>Kneecapped</em><br>and Built an AI Lab Anyway",
+      subtitle: "A man who couldn't get hired at KFC built a company worth more than KFC's parent. That company got fined $2.8 billion and had its founder vanish. Then it built one of the world's most downloaded AI model families. This is the honest, irreverent, slightly incredulous Alibaba 101.",
+      metaWritten: "📍 Written for Titus",
+      metaDate: "📅 June 2026",
+      metaRead: "⏱ ~50 min read",
+      metaSections: "🧠 7 sections"
+    },
+    stats: {
+      marketCap: "Market Cap 2026",
+      downloads: "Qwen Downloads",
+      infrastructure: "AI Infrastructure Pledge",
+      fine: "Fine Survived",
+      users: "Qwen Monthly Users"
+    },
+    s01: {
+      eyebrow: "Section 01 — Origin",
+      title: "The Man Who Failed Everything and Then Won Everything",
+      deck: "Harvard said no 10 times. KFC said no. The police said no. The universe kept saying no. Jack Ma kept saying yes."
+    },
+    s02: {
+      eyebrow: "Section 02 — The Build",
+      title: "Six Minutes, $20 Million, and a Crocodile",
+      deck: "How an English teacher beat the world's largest e-commerce company using free listings and the ability to bargain like an auntie at a pasar malam."
+    },
+    s03: {
+      eyebrow: "Section 03 — The Kneecapping",
+      title: "The Speech That Cost $300 Billion",
+      deck: "Rule #1 of doing business in China: you can be rich, but you can never outshine the Party."
+    },
+    s04: {
+      eyebrow: "Section 04 — Context",
+      title: "996, GPU Starvation, and Building GitHub Before Your Product",
+      deck: "To understand why Alibaba is still fighting, you have to understand the water Chinese tech companies swim in."
+    },
+    s05: {
+      eyebrow: "Section 05 — The AI Comeback",
+      title: "From Japan Studying Fish to #3 on the Global AI Index",
+      deck: "While Jack Ma was in Tokyo studying sustainable agriculture, his engineers were training on 36 trillion tokens."
+    },
+    s06: {
+      eyebrow: "Section 06 — The Stack",
+      title: "The Parallel Internet You've Already Used",
+      deck: "Most Singaporeans interact with Alibaba every time they complain about a Lazada delivery. That's just the lobby floor of a very tall building."
+    },
+    s07: {
+      eyebrow: "Section 07 — Verdict",
+      title: "The Unkillable Crocodile",
+      deck: "June 27, 2026. Fable 5 still suspended. GPT-5.6 available to 20 vetted partners. Qwen 3.7-Max — one API call away for anyone."
+    },
+    footer: {
+      logo: "通义千问 · ALIBABA 101",
+      written: "Written for Titus · June 2026 · Part of the 101 Series",
+      disclaimer: "All takes are intentional. No fried chicken establishments were harmed.",
+      note: "GPT-5.6 was unavailable for comment. Fable 5 was suspended. Qwen said Aliyun earns more than AWS. It doesn't."
+    }
+  },
+  zh: {
+    nav: {
+      brand: "阿里巴巴 101",
+      origin: "起源",
+      build: "发家史",
+      kneecap: "被废膝盖",
+      context: "背景",
+      ai: "AI 逆袭",
+      stack: "帝国版图",
+      verdict: "结语"
+    },
+    today: {
+      label: "⚡ 2026 年 6 月 27 日——AI 史上诡异的一天",
+      claude: "Claude Fable 5 —— 被美国政府暂停，第 15 天",
+      gpt: "GPT-5.6 Sol —— 已上线，仅限美国政府审查通过的合作伙伴",
+      qwen: "Qwen 3.7-Max —— 任何人只需一次 API 调用"
+    },
+    hero: {
+      eyebrow: "从业者情报报告 · 2026 年 6 月",
+      title: "那家被<span style='text-decoration: underline; text-decoration-thickness: 4px;'>废了膝盖</span><br>却还是建起了 AI 实验室的公司",
+      subtitle: "一个连肯德基都不要的男人，创建了一家市值超过肯德基母公司的企业。这家公司被罚了 28 亿美元，创始人人间蒸发。然后它打造了全球下载量最高的 AI 模型家族之一。这是诚实、不敬、略带难以置信的阿里巴巴 101。",
+      metaWritten: "📍 写给 Titus",
+      metaDate: "📅 2026 年 6 月",
+      metaRead: "⏱ 约 50 分钟阅读",
+      metaSections: "🧠 7 个章节"
+    },
+    stats: {
+      marketCap: "2026 市值",
+      downloads: "Qwen 下载量",
+      infrastructure: "AI 基础设施承诺",
+      fine: "挺过的罚款",
+      users: "Qwen 月活用户"
+    },
+    s01: {
+      eyebrow: "第一章 —— 起源",
+      title: "那个失败了一切却又赢得一切的男人",
+      deck: "哈佛拒绝了 10 次。肯德基拒绝了。警察拒绝了。宇宙一直在说不。马云一直在说是。"
+    },
+    s02: {
+      eyebrow: "第二章 —— 发家史",
+      title: "六分钟、两千万美元、还有一只鳄鱼",
+      deck: "一个英语老师如何用免费上架和像巴刹阿姨一样的砍价能力，击败了全球最大的电商公司。"
+    },
+    s03: {
+      eyebrow: "第三章 —— 被废膝盖",
+      title: "那场价值三千亿美元的演讲",
+      deck: "在中国做生意的第一法则：你可以有钱，但永远不能盖过党的风头。"
+    },
+    s04: {
+      eyebrow: "第四章 —— 背景",
+      title: "996、GPU 饥荒、以及在做产品之前先造 GitHub",
+      deck: "要理解为什么阿里巴巴还在战斗，你得先了解中国科技公司所处的水域。"
+    },
+    s05: {
+      eyebrow: "第五章 —— AI 逆袭",
+      title: "从日本研究鱼类到全球 AI 指数第三名",
+      deck: "当马云在东京研究可持续农业时，他的工程师们正在用 36 万亿 token 训练模型。"
+    },
+    s06: {
+      eyebrow: "第六章 —— 帝国版图",
+      title: "你早已用过的平行互联网",
+      deck: "大多数新加坡人每次抱怨 Lazada 快递时都在和阿里巴巴打交道。那只是一栋高楼的大堂而已。"
+    },
+    s07: {
+      eyebrow: "第七章 —— 结语",
+      title: "打不死的鳄鱼",
+      deck: "2026 年 6 月 27 日。Fable 5 仍被暂停。GPT-5.6 仅对 20 家审查通过的合作伙伴开放。Qwen 3.7-Max——任何人只需一次 API 调用。"
+    },
+    footer: {
+      logo: "通义千问 · 阿里巴巴 101",
+      written: "写给 Titus · 2026 年 6 月 · 101 系列之一",
+      disclaimer: "所有观点都是故意的。没有任何炸鸡店受到伤害。",
+      note: "GPT-5.6 无法接受采访。Fable 5 被暂停。Qwen 说阿里云收入超过 AWS。它在吹牛。"
+    }
+  }
+};
+
+let currentLang = 'en';
+
+function updateContent(lang) {
+  const t = translations[lang];
+  
+  // Nav
+  document.querySelector('.nav-brand').textContent = t.nav.brand;
+  document.querySelectorAll('.nav-links a')[0].textContent = t.nav.origin;
+  document.querySelectorAll('.nav-links a')[1].textContent = t.nav.build;
+  document.querySelectorAll('.nav-links a')[2].textContent = t.nav.kneecap;
+  document.querySelectorAll('.nav-links a')[3].textContent = t.nav.context;
+  document.querySelectorAll('.nav-links a')[4].textContent = t.nav.ai;
+  document.querySelectorAll('.nav-links a')[5].textContent = t.nav.stack;
+  document.querySelectorAll('.nav-links a')[6].textContent = t.nav.verdict;
+  
+  // Today box
+  document.querySelector('.today-label').textContent = t.today.label;
+  document.querySelectorAll('.today-item')[0].innerHTML = '<span class="dot dot-r"></span>' + t.today.claude;
+  document.querySelectorAll('.today-item')[1].innerHTML = '<span class="dot dot-g"></span>' + t.today.gpt;
+  document.querySelectorAll('.today-item')[2].innerHTML = '<span class="dot dot-o"></span>' + t.today.qwen;
+  
+  // Hero
+  document.querySelector('.hero-eyebrow').textContent = t.hero.eyebrow;
+  document.querySelector('.hero h1').innerHTML = t.hero.title;
+  document.querySelector('.hero-sub').textContent = t.hero.subtitle;
+  document.querySelectorAll('.hero-meta span')[0].textContent = t.hero.metaWritten;
+  document.querySelectorAll('.hero-meta span')[1].textContent = t.hero.metaDate;
+  document.querySelectorAll('.hero-meta span')[2].textContent = t.hero.metaRead;
+  document.querySelectorAll('.hero-meta span')[3].textContent = t.hero.metaSections;
+  
+  // Stats
+  document.querySelectorAll('.stat-lbl')[0].textContent = t.stats.marketCap;
+  document.querySelectorAll('.stat-lbl')[1].textContent = t.stats.downloads;
+  document.querySelectorAll('.stat-lbl')[2].textContent = t.stats.infrastructure;
+  document.querySelectorAll('.stat-lbl')[3].textContent = t.stats.fine;
+  document.querySelectorAll('.stat-lbl')[4].textContent = t.stats.users;
+  
+  // Sections
+  document.querySelectorAll('.section-eyebrow')[0].textContent = t.s01.eyebrow;
+  document.querySelectorAll('h2')[0].textContent = t.s01.title;
+  document.querySelector('.section-deck').textContent = t.s01.deck;
+  
+  document.querySelectorAll('.section-eyebrow')[1].textContent = t.s02.eyebrow;
+  document.querySelectorAll('h2')[1].textContent = t.s02.title;
+  document.querySelectorAll('.section-deck')[1].textContent = t.s02.deck;
+  
+  document.querySelectorAll('.section-eyebrow')[2].textContent = t.s03.eyebrow;
+  document.querySelectorAll('h2')[2].textContent = t.s03.title;
+  document.querySelectorAll('.section-deck')[2].textContent = t.s03.deck;
+  
+  document.querySelectorAll('.section-eyebrow')[3].textContent = t.s04.eyebrow;
+  document.querySelectorAll('h2')[3].textContent = t.s04.title;
+  document.querySelectorAll('.section-deck')[3].textContent = t.s04.deck;
+  
+  document.querySelectorAll('.section-eyebrow')[4].textContent = t.s05.eyebrow;
+  document.querySelectorAll('h2')[4].textContent = t.s05.title;
+  document.querySelectorAll('.section-deck')[4].textContent = t.s05.deck;
+  
+  document.querySelectorAll('.section-eyebrow')[5].textContent = t.s06.eyebrow;
+  document.querySelectorAll('h2')[5].textContent = t.s06.title;
+  document.querySelectorAll('.section-deck')[5].textContent = t.s06.deck;
+  
+  document.querySelectorAll('.section-eyebrow')[6].textContent = t.s07.eyebrow;
+  document.querySelectorAll('h2')[6].textContent = t.s07.title;
+  document.querySelectorAll('.section-deck')[6].textContent = t.s07.deck;
+  
+  // Footer
+  document.querySelector('.footer-logo').textContent = t.footer.logo;
+  document.querySelector('.footer-body').innerHTML = 
+    t.footer.written + '<br>\n    <a href="https://claude-101-psi.vercel.app">Claude 101</a> ·\n    <a href="https://tituslhy.github.io/chatgpt-101/">ChatGPT 101</a> ·\n    <a href="https://tituslhy.github.io/ollama-101/">Ollama 101</a><br><br>\n    ' + t.footer.disclaimer + '<br>\n    ' + t.footer.note;
+  
+  // Update button text
+  document.getElementById('langToggle').textContent = lang === 'en' ? '中文' : 'English';
+  
+  // Update html lang attribute
+  document.documentElement.lang = lang;
+}
+
 // Active nav on scroll
 const secs = document.querySelectorAll('section[id]');
 const navAs = document.querySelectorAll('.nav-links a');
@@ -1107,6 +1366,12 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     const t = document.querySelector(a.getAttribute('href'));
     if (t) window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 60, behavior: 'smooth' });
   });
+});
+
+// Language toggle
+document.getElementById('langToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'en' ? 'zh' : 'en';
+  updateContent(currentLang);
 });
 </script>
 </body>
