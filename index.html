@@ -133,7 +133,6 @@ nav {
   font-size: clamp(2rem, 6vw, 3.6rem);
   font-weight: 800; color: #fff; line-height: 1.1;
   margin-bottom: 1.2rem;
-  transform: scaleY(1.15);
   display: inline-block;
 }
 .hero h1 em { font-style: normal; text-decoration: underline; text-decoration-thickness: 4px; }
@@ -187,7 +186,6 @@ nav {
   font-weight: 800; color: var(--ink);
   margin-bottom: 0.8rem; line-height: 1.35;
   text-transform: none;
-  transform: scaleY(1.15);
   display: inline-block;
 }
 .section-deck {
@@ -245,7 +243,6 @@ nav {
   padding: 0.25rem 0.5rem; text-align: center;
   line-height: 1.4; border-radius: 3px;
   margin-top: 0.15rem;
-  transform: scaleY(1.15);
   display: inline-block;
 }
 .tl-body { font-size: 0.9rem; color: var(--ink-mid); line-height: 1.65; }
@@ -428,7 +425,6 @@ nav {
 .qwen-section .section-eyebrow { color: var(--qp-lt); }
 .qwen-section h2 { 
   color: #fff; 
-  transform: scaleY(1.15);
   display: inline-block;
 }
 .qwen-section .section-deck { color: rgba(168,85,247,0.7); }
@@ -602,6 +598,10 @@ code {
   font-family: 'JetBrains Mono', monospace; font-size: 0.82em;
   color: var(--orange-dim); background: var(--orange-bg);
   padding: 0.1em 0.35em; border-radius: 2px;
+}
+
+html[lang="zh"] :is(.hero h1, .section h2, .tl-year, .qwen-section h2) {
+  transform: scaleY(1.15);
 }
 </style>
 </head>
